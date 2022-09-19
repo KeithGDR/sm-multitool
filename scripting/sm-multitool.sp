@@ -227,6 +227,15 @@ public void OnPluginStart() {
 		g_UniqueIdent = "{lightred}";
 	}
 
+	//ArrayLists
+	g_Commands = new ArrayList(ByteCountToCells(128));
+	g_HookEvents = new ArrayList(ByteCountToCells(256));
+	g_Triggers = new ArrayList();
+
+	//StringMaps
+	g_CommandFlags = new StringMap();
+	g_CachedTimes = new StringMap();
+
 	//Misc
 	RegAdminCmd("sm_snoclip", Command_SilentNoclip, ADMFLAG_SLAY, "Noclip but without any indicators.");
 	RegAdminCmd("sm_tools", Command_Tools, ADMFLAG_SLAY, "List available commands under server tools.");
@@ -427,15 +436,6 @@ public void OnPluginStart() {
 			OnEntityCreated(entity, classname);
 		}
 	}
-
-	//ArrayLists
-	g_Commands = new ArrayList(ByteCountToCells(128));
-	g_HookEvents = new ArrayList(ByteCountToCells(256));
-	g_Triggers = new ArrayList();
-
-	//StringMaps
-	g_CommandFlags = new StringMap();
-	g_CachedTimes = new StringMap();
 
 	//Timers
 	CreateTimer(2.0, Timer_CheckForUpdates, _, TIMER_REPEAT);
