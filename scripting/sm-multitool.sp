@@ -189,6 +189,7 @@ public Plugin myinfo = {
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
 	game = GetEngineVersion();
 
+	#if defined _tf2_included
 	if (game == Engine_TF2) {
 		MarkNativeAsOptional("TF2Econ_GetItemClassName");
 		MarkNativeAsOptional("TF2Econ_GetItemSlot");
@@ -201,6 +202,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 		MarkNativeAsOptional("TF2Items_SetNumAttributes");
 		MarkNativeAsOptional("TF2Items_SetAttribute");
 	}
+	#endif
 
 	return APLRes_Success;
 }
