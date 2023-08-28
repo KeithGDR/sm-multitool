@@ -6,10 +6,12 @@
 #include <sourcemod>
 #include <adminmenu>
 
-#include <misc-sm>
 #include <misc-colors>
-#include <misc-tf>
 #include <misc-csgo>
+#include <misc-l4d>
+#include <misc-methodmaps>
+#include <misc-sm>
+#include <misc-tf>
 
 #undef REQUIRE_EXTENSIONS
 #include <tf2items>
@@ -24,7 +26,7 @@
 #define PLUGIN_NAME "[SM] Multitool"
 #define PLUGIN_AUTHOR "Drixevel"
 #define PLUGIN_DESCRIPTION "A very large and bloated plugin that consists of tools via commands and code to make managing servers and developing plugins easy."
-#define PLUGIN_VERSION "1.1.1"
+#define PLUGIN_VERSION "1.1.2"
 #define PLUGIN_URL "https://drixevel.dev/"
 
 #define TAG "[Tools]"
@@ -466,6 +468,7 @@ public void TF2_OnWaitingForPlayersStart() {
 
 public Action Timer_CheckForUpdates(Handle timer) {
 	OnAllPluginsLoaded();
+	return Plugin_Continue;
 }
 
 public void OnAllPluginsLoaded() {
@@ -552,6 +555,8 @@ public Action Timer_CheckLoad(Handle timer, DataPack pack) {
 	if (plugin == null) {
 		ServerCommand("sm plugins load %s", sReload);
 	}
+
+	return Plugin_Continue;
 }
 
 public void OnMapStart() {
@@ -659,6 +664,7 @@ void ListCommands(int client) {
 
 public int PanelHandler_Commands(Menu menu, MenuAction action, int param1, int param2) {
 	delete menu;
+	return 0;
 }
 
 public Action Command_Restart(int client, int args) {
@@ -675,6 +681,7 @@ public void Confirm_Restart(int client, ConfirmationResponses response) {
 
 public Action Timer_Restart(Handle timer) {
 	ServerCommand("_restart");
+	return Plugin_Continue;
 }
 
 public Action Command_Quit(int client, int args) {
@@ -691,6 +698,7 @@ public void Confirm_Quit(int client, ConfirmationResponses response) {
 
 public Action Timer_Quit(Handle timer) {
 	ServerCommand("quit");
+	return Plugin_Continue;
 }
 
 public Action Command_Teleport(int client, int args) {
@@ -1348,6 +1356,8 @@ public Action Timer_CacheValues(Handle timer, DataPack data) {
 		g_iAmmo[entity] = GetWeaponAmmo(client, entity);
 		g_iClip[entity] = GetWeaponClip(entity);
 	}
+
+	return Plugin_Continue;
 }
 
 public void OnEntityDestroyed(int entity) {
@@ -1406,7 +1416,7 @@ public int MenuHandler_ManageBots(Menu menu, MenuAction action, int param1, int 
 				if (!IsPlayerIndex(target) || !IsFakeClient(target)) {
 					SendPrint(param1, "Please aim your crosshair at a valid bot.");
 					OpenManageBotsMenu(param1);
-					return;
+					return 0;
 				}
 
 				SendPrintToAll("[H]%N [D]has kicked the bot [H]%N [D].", param1, target);
@@ -1419,7 +1429,7 @@ public int MenuHandler_ManageBots(Menu menu, MenuAction action, int param1, int 
 				if (!IsPlayerIndex(target) || !IsFakeClient(target)) {
 					SendPrint(param1, "Please aim your crosshair at a valid bot.");
 					OpenManageBotsMenu(param1);
-					return;
+					return 0;
 				}
 
 				OpenSetBotClassMenu(param1, target);
@@ -1429,7 +1439,7 @@ public int MenuHandler_ManageBots(Menu menu, MenuAction action, int param1, int 
 				if (!IsPlayerIndex(target) || !IsFakeClient(target)) {
 					SendPrint(param1, "Please aim your crosshair at a valid bot.");
 					OpenManageBotsMenu(param1);
-					return;
+					return 0;
 				}
 
 				OpenSetBotTeamMenu(param1, target);
@@ -1451,6 +1461,8 @@ public int MenuHandler_ManageBots(Menu menu, MenuAction action, int param1, int 
 			delete menu;
 		}
 	}
+	
+	return 0;
 }
 
 void OpenSetBotClassMenu(int client, int target) {
@@ -1485,7 +1497,7 @@ public int MenuHandler_SetBotClass(Menu menu, MenuAction action, int param1, int
 			if (!IsPlayerIndex(target) || !IsFakeClient(target)) {
 				SendPrint(param1, "Bot is no longer valid.");
 				OpenManageBotsMenu(param1);
-				return;
+				return 0;
 			}
 
 			TF2_SetPlayerClass(target, class);
@@ -1504,6 +1516,8 @@ public int MenuHandler_SetBotClass(Menu menu, MenuAction action, int param1, int
 			delete menu;
 		}
 	}
+
+	return 0;
 }
 
 void OpenSetBotTeamMenu(int client, int target) {
@@ -1531,7 +1545,7 @@ public int MenuHandler_SetBotTeam(Menu menu, MenuAction action, int param1, int 
 			if (!IsPlayerIndex(target) || !IsFakeClient(target)) {
 				SendPrint(param1, "Bot is no longer valid.");
 				OpenManageBotsMenu(param1);
-				return;
+				return 0;
 			}
 
 			TF2_ChangeClientTeam(target, team);
@@ -1550,6 +1564,8 @@ public int MenuHandler_SetBotTeam(Menu menu, MenuAction action, int param1, int 
 			delete menu;
 		}
 	}
+
+	return 0;
 }
 
 void OpenSetBotQuotaMenu(int client) {
@@ -1588,6 +1604,8 @@ public int MenuHandler_SetBotQuota(Menu menu, MenuAction action, int param1, int
 			delete menu;
 		}
 	}
+
+	return 0;
 }
 
 public Action Command_Password(int client, int args) {
@@ -2239,6 +2257,8 @@ public int MenuHandler_Particles(Menu menu, MenuAction action, int param1, int p
 			delete menu;
 		}
 	}
+
+	return 0;
 }
 
 public Action Command_GenerateParticles(int client, int args) {
@@ -2287,10 +2307,12 @@ public Action Command_GenerateParticles(int client, int args) {
 
 public Action SpewSounds(int clients[MAXPLAYERS], int &numClients, char sample[PLATFORM_MAX_PATH], int &entity, int &channel, float &volume, int &level, int &pitch, int &flags, char soundEntry[PLATFORM_MAX_PATH], int &seed) {
 	SendPrintToAll("[SpewSounds] -: [H]%s [D]", sample);
+	return Plugin_Continue;
 }
 
 public Action SpewAmbients(char sample[PLATFORM_MAX_PATH], int &entity, float &volume, int &level, int &pitch, float pos[3], int &flags, float &delay) {
 	SendPrintToAll("[SpewAmbients] -: [H]%s [D]", sample);
+	return Plugin_Continue;
 }
 
 public void OnEntityCreated(int entity, const char[] classname) {
@@ -2775,6 +2797,8 @@ public Action OnClientCommand(int client, int args) {
 		
 		SendPrintToAll("[SpewCommands] -[H]%N [D]: [H]%s [D][[H]%s[D]]", client, sCommand, sArguments);
 	}
+
+	return Plugin_Continue;
 }
 
 public Action Command_GetEntCount(int client, int args) {
@@ -2815,9 +2839,10 @@ public Action Command_Bhop(int client, int args) {
 
 public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3], float angles[3], int &weapon, int &subtype, int &cmdnum, int &tickcount, int &seed, int mouse[2]) {
 	if (g_Bunnyhopping[client] && (!(GetEntityFlags(client) & FL_FAKECLIENT) && buttons & IN_JUMP) && (GetEntityFlags(client) & FL_ONGROUND)) {
-		int nOldButtons = GetEntProp(client, Prop_Data, "m_nOldButtons");
-		SetEntProp(client, Prop_Data, "m_nOldButtons", (nOldButtons &= ~(IN_JUMP | IN_DUCK)));
+		buttons &= ~IN_JUMP;
 	}
+
+	return Plugin_Continue;
 }
 
 public Action Command_KillEntity(int client, int args) {
@@ -2910,6 +2935,7 @@ public Action Command_SpawnDummy(int client, int args) {
 
 public Action OnDummyThink(int client) {
 	SetEntityHealth(client, GetEntProp(client, Prop_Data, "m_iMaxHealth"));
+	return Plugin_Continue;
 }
 
 public bool TraceRayDontHitEntity(int entity,int mask,any data) {

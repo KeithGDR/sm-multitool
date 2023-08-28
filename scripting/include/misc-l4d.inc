@@ -20,38 +20,36 @@
 #endif
 #define _misc_l4d_included
 
-enum L4DGame
-{
+#define TEAM_SURVIVORS 2
+#define TEAM_INFECTED 3
+
+enum L4DGame {
 	L4DGame_L4D = 0,
 	L4DGame_L4D2 = 1
 }
 
-enum L4DTeam
-{
+enum L4DTeam {
 	L4DTeam_Unassigned = 0,
 	L4DTeam_Spectator = 1,
 	L4DTeam_Survivors = 2,
 	L4DTeam_Infected = 3
 }
 
-enum L4DSurvivor
-{
+enum L4DSurvivor {
 	L4DSurvivor_Bill = 0,
 	L4DSurvivor_Zoey = 1,
 	L4DSurvivor_Louis = 2,
 	L4DSurvivor_Francis = 3
 }
 
-enum L4D2Survivor
-{
+enum L4D2Survivor {
 	L4D2Survivor_Nick = 0,
 	L4D2Survivor_Rochelle = 1,
 	L4D2Survivor_Coach = 2,
 	L4D2Survivor_Ellis = 3
 }
 
-enum L4DInfected
-{
+enum L4DInfected {
 	L4DInfected_None = 0,
 	L4DInfected_Smoker = 1,
 	L4DInfected_Boomer = 2,
@@ -60,8 +58,7 @@ enum L4DInfected
 	L4DInfected_Tank = 5
 }
 
-enum L4D2Infected
-{
+enum L4D2Infected {
 	L4D2Infected_None = 0,
 	L4D2Infected_Smoker = 1,
 	L4D2Infected_Boomer = 2,
@@ -80,8 +77,7 @@ enum L4D2Infected
  * @return				Current L4DTeam of client.
  * @error				Invalid client index.
  */
-stock L4DTeam L4D_GetClientTeam(int client)
-{
+stock L4DTeam L4D_GetClientTeam(int client) {
 	return view_as<L4DTeam>(GetClientTeam(client));
 }
 
@@ -89,15 +85,14 @@ stock L4DTeam L4D_GetClientTeam(int client)
  * Gets the current group of survivors assigned to the map.
  * @return			L4DGame enum index.
  */
-stock L4DGame L4D_GetSurvivorGroup()
-{
+stock L4DGame L4D_GetSurvivorGroup() {
 	int entity = -1; char sCharacter[32];
-	while ((entity = FindEntityByClassname(entity, "info_survivor_position")) != -1)
-	{
+	while ((entity = FindEntityByClassname(entity, "info_survivor_position")) != -1) {
 		GetEntPropString(entity, Prop_Data, "m_iszSurvivorName", sCharacter, sizeof(sCharacter));
 
-		if (strlen(sCharacter) > 0 && (StrEqual(sCharacter, "Bill") || StrEqual(sCharacter, "Zoey") || StrEqual(sCharacter, "Louis") || StrEqual(sCharacter, "Francis")))
+		if (strlen(sCharacter) > 0 && (StrEqual(sCharacter, "Bill") || StrEqual(sCharacter, "Zoey") || StrEqual(sCharacter, "Louis") || StrEqual(sCharacter, "Francis"))) {
 			return L4DGame_L4D;
+		}
 	}
 
 	return L4DGame_L4D2;
@@ -109,13 +104,11 @@ stock L4DGame L4D_GetSurvivorGroup()
  * @param client	Players index.
  * @return			True if player is incapacitated, false otherwise.
  */
-stock bool L4D_IsClientIncapacitated(int client)
-{
+stock bool L4D_IsClientIncapacitated(int client) {
 	return view_as<bool>(GetEntProp(client, Prop_Send, "m_isIncapacitated"));
 }
 
-stock bool L4D_IsClientIncapped(int client)
-{
+stock bool L4D_IsClientIncapped(int client) {
 	return view_as<bool>(GetEntProp(client, Prop_Send, "m_isIncapacitated"));
 }
 
@@ -125,15 +118,15 @@ stock bool L4D_IsClientIncapped(int client)
  * @param client	Players index.
  * @return			True if the player is capped, false otherwise.
  */
-stock bool L4D_IsPlayerCapped(int client)
-{
+stock bool L4D_IsPlayerCapped(int client) {
 	if(GetEntPropEnt(client, Prop_Send, "m_pummelAttacker") > 0 || 
 		GetEntPropEnt(client, Prop_Send, "m_carryAttacker") > 0 || 
 		GetEntPropEnt(client, Prop_Send, "m_pounceAttacker") > 0 || 
 		GetEntPropEnt(client, Prop_Send, "m_jockeyAttacker") > 0 || 
 		GetEntPropEnt(client, Prop_Send, "m_pounceAttacker") > 0 ||
-		GetEntPropEnt(client, Prop_Send, "m_tongueOwner") > 0)
-		return true;
+		GetEntPropEnt(client, Prop_Send, "m_tongueOwner") > 0) {
+			return true;
+		}
 	return false;
 }
 
@@ -149,8 +142,7 @@ stock bool L4D_IsPlayerCapped(int client)
  * @param client	Players index.
  * @return			Index of the survivor, -1 otherwise.
  */
-stock L4DSurvivor L4D_GetClientSurvivorId(int client)
-{
+stock L4DSurvivor L4D_GetClientSurvivorId(int client) {
 	int offset = FindSendPropInfo("CTerrorPlayer", "m_survivorCharacter");
 	return view_as<L4DSurvivor>(GetEntData(client, offset, 1));
 }
@@ -161,8 +153,7 @@ stock L4DSurvivor L4D_GetClientSurvivorId(int client)
  * @param client	Players index.
  * @return			Index of the survivor, -1 otherwise.
  */
-stock L4D2Survivor L4D2_GetClientSurvivorId(int client)
-{
+stock L4D2Survivor L4D2_GetClientSurvivorId(int client) {
 	int offset = FindSendPropInfo("CTerrorPlayer", "m_survivorCharacter");
 	return view_as<L4D2Survivor>(GetEntData(client, offset, 1));
 }
@@ -173,8 +164,7 @@ stock L4D2Survivor L4D2_GetClientSurvivorId(int client)
  * @param client	Players index.
  * @return			True if found, false otherwise.
  */
-stock bool L4D_GetClientSurvivorName(int client, char[] name, int size)
-{
+stock bool L4D_GetClientSurvivorName(int client, char[] name, int size) {
 	return L4D_GetSurvivorName(L4D_GetClientSurvivorId(client), name, size);
 }
 
@@ -184,8 +174,7 @@ stock bool L4D_GetClientSurvivorName(int client, char[] name, int size)
  * @param client	Players index.
  * @return			True if found, false otherwise.
  */
-stock bool L4D2_GetClientSurvivorName(int client, char[] name, int size)
-{
+stock bool L4D2_GetClientSurvivorName(int client, char[] name, int size) {
 	return L4D2_GetSurvivorName(L4D2_GetClientSurvivorId(client), name, size);
 }
 
@@ -195,18 +184,18 @@ stock bool L4D2_GetClientSurvivorName(int client, char[] name, int size)
  * @param name		Name of the survivor.
  * @return			The ID of the survivor, -1 for not found.
  */
-stock L4DSurvivor L4D_GetSurvivorID(const char[] name)
-{
-	if (StrEqual(name, "bill", false))
+stock L4DSurvivor L4D_GetSurvivorID(const char[] name) {
+	if (StrEqual(name, "bill", false)) {
 		return L4DSurvivor_Bill;
-	else if (StrEqual(name, "zoey", false))
+	} else if (StrEqual(name, "zoey", false)) {
 		return L4DSurvivor_Zoey;
-	else if (StrEqual(name, "louis", false))
+	} else if (StrEqual(name, "louis", false)) {
 		return L4DSurvivor_Louis;
-	else if (StrEqual(name, "francis", false))
+	} else if (StrEqual(name, "francis", false)) {
 		return L4DSurvivor_Francis;
+	}
 	
-	return -1;
+	return view_as<L4DSurvivor>(-1);
 }
 
 /**
@@ -215,18 +204,18 @@ stock L4DSurvivor L4D_GetSurvivorID(const char[] name)
  * @param name		Name of the survivor.
  * @return			The ID of the survivor, -1 for not found.
  */
-stock L4D2Survivor L4D2_GetSurvivorID(const char[] name)
-{
-	if (StrEqual(name, "nick", false))
+stock L4D2Survivor L4D2_GetSurvivorID(const char[] name) {
+	if (StrEqual(name, "nick", false)) {
 		return L4D2Survivor_Nick;
-	else if (StrEqual(name, "rochelle", false))
+	} else if (StrEqual(name, "rochelle", false)) {
 		return L4D2Survivor_Rochelle;
-	else if (StrEqual(name, "coach", false))
+	} else if (StrEqual(name, "coach", false)) {
 		return L4D2Survivor_Coach;
-	else if (StrEqual(name, "ellis", false))
+	} else if (StrEqual(name, "ellis", false)) {
 		return L4D2Survivor_Ellis;
+	}
 	
-	return -1;
+	return view_as<L4D2Survivor>(-1);
 }
 
 /**
@@ -235,27 +224,21 @@ stock L4D2Survivor L4D2_GetSurvivorID(const char[] name)
  * @param id		ID of the survivor.
  * @return			True if found and buffer filled, false otherwise.
  */
-stock bool L4D_GetSurvivorName(L4DSurvivor id, char[] name, int size, bool capitalize = false)
-{
-	switch (id)
-	{
-		case L4DSurvivor_Bill:
-		{
+stock bool L4D_GetSurvivorName(L4DSurvivor id, char[] name, int size, bool capitalize = false) {
+	switch (id) {
+		case L4DSurvivor_Bill: {
 			strcopy(name, size, capitalize ? "Bill" : "bill");
 			return true;
 		}
-		case L4DSurvivor_Zoey:
-		{
+		case L4DSurvivor_Zoey: {
 			strcopy(name, size, capitalize ? "Zoey" : "zoey");
 			return true;
 		}
-		case L4DSurvivor_Louis:
-		{
+		case L4DSurvivor_Louis: {
 			strcopy(name, size, capitalize ? "Louis" : "louis");
 			return true;
 		}
-		case L4DSurvivor_Francis:
-		{
+		case L4DSurvivor_Francis: {
 			strcopy(name, size, capitalize ? "Francis" : "francis");
 			return true;
 		}
@@ -270,27 +253,21 @@ stock bool L4D_GetSurvivorName(L4DSurvivor id, char[] name, int size, bool capit
  * @param id		ID of the survivor.
  * @return			True if found and buffer filled, false otherwise.
  */
-stock bool L4D2_GetSurvivorName(L4D2Survivor id, char[] name, int size, bool capitalize = false)
-{
-	switch (id)
-	{
-		case L4D2Survivor_Nick:
-		{
+stock bool L4D2_GetSurvivorName(L4D2Survivor id, char[] name, int size, bool capitalize = false) {
+	switch (id) {
+		case L4D2Survivor_Nick: {
 			strcopy(name, size, capitalize ? "Nick" : "nick");
 			return true;
 		}
-		case L4D2Survivor_Rochelle:
-		{
+		case L4D2Survivor_Rochelle: {
 			strcopy(name, size, capitalize ? "Rochelle" : "rochelle");
 			return true;
 		}
-		case L4D2Survivor_Coach:
-		{
+		case L4D2Survivor_Coach: {
 			strcopy(name, size, capitalize ? "Coach" : "coach");
 			return true;
 		}
-		case L4D2Survivor_Ellis:
-		{
+		case L4D2Survivor_Ellis: {
 			strcopy(name, size, capitalize ? "Ellis" : "ellis");
 			return true;
 		}
@@ -311,8 +288,7 @@ stock bool L4D2_GetSurvivorName(L4D2Survivor id, char[] name, int size, bool cap
  * @param client	Players index.
  * @return			Index of the infected, -1 otherwise.
  */
-stock L4DInfected L4D_GetClientInfectedId(int client)
-{
+stock L4DInfected L4D_GetClientInfectedId(int client) {
 	return view_as<L4DInfected>(GetEntProp(client, Prop_Send, "m_zombieClass"));
 }
 
@@ -322,8 +298,7 @@ stock L4DInfected L4D_GetClientInfectedId(int client)
  * @param client	Players index.
  * @return			Index of the infected, -1 otherwise.
  */
-stock L4D2Infected L4D2_GetClientInfectedId(int client)
-{
+stock L4D2Infected L4D2_GetClientInfectedId(int client) {
 	return view_as<L4D2Infected>(GetEntProp(client, Prop_Send, "m_zombieClass"));
 }
 
@@ -333,8 +308,7 @@ stock L4D2Infected L4D2_GetClientInfectedId(int client)
  * @param client	Players index.
  * @return			True if found, false otherwise.
  */
-stock bool L4D_GetClientInfectedName(int client, char[] name, int size)
-{
+stock bool L4D_GetClientInfectedName(int client, char[] name, int size) {
 	return L4D_GetInfectedName(L4D_GetClientInfectedId(client), name, size);
 }
 
@@ -344,8 +318,7 @@ stock bool L4D_GetClientInfectedName(int client, char[] name, int size)
  * @param client	Players index.
  * @return			True if found, false otherwise.
  */
-stock bool L4D2_GetClientInfectedName(int client, char[] name, int size)
-{
+stock bool L4D2_GetClientInfectedName(int client, char[] name, int size) {
 	return L4D2_GetInfectedName(L4D2_GetClientInfectedId(client), name, size);
 }
 
@@ -357,16 +330,17 @@ stock bool L4D2_GetClientInfectedName(int client, char[] name, int size)
  */
 stock L4DInfected L4D_GetInfectedID(const char[] name)
 {
-	if (StrEqual(name, "smoker", false))
+	if (StrEqual(name, "smoker", false)) {
 		return L4DInfected_Smoker;
-	else if (StrEqual(name, "boomer", false))
+	} else if (StrEqual(name, "boomer", false)) {
 		return L4DInfected_Boomer;
-	else if (StrEqual(name, "hunter", false))
+	} else if (StrEqual(name, "hunter", false)) {
 		return L4DInfected_Hunter;
-	else if (StrEqual(name, "witch", false))
+	} else if (StrEqual(name, "witch", false)) {
 		return L4DInfected_Witch;
-	else if (StrEqual(name, "tank", false))
+	} else if (StrEqual(name, "tank", false)) {
 		return L4DInfected_Tank;
+	}
 	
 	return L4DInfected_None;
 }
@@ -377,24 +351,24 @@ stock L4DInfected L4D_GetInfectedID(const char[] name)
  * @param name		Name of the infected.
  * @return			The ID of the infected, -1 for not found.
  */
-stock L4D2Infected L4D2_GetInfectedID(const char[] name)
-{
-	if (StrEqual(name, "smoker", false))
+stock L4D2Infected L4D2_GetInfectedID(const char[] name) {
+	if (StrEqual(name, "smoker", false)) {
 		return L4D2Infected_Smoker;
-	else if (StrEqual(name, "boomer", false))
+	} else if (StrEqual(name, "boomer", false)) {
 		return L4D2Infected_Boomer;
-	else if (StrEqual(name, "hunter", false))
+	} else if (StrEqual(name, "hunter", false)) {
 		return L4D2Infected_Hunter;
-	else if (StrEqual(name, "spitter", false))
+	} else if (StrEqual(name, "spitter", false)) {
 		return L4D2Infected_Spitter;
-	else if (StrEqual(name, "charger", false))
+	} else if (StrEqual(name, "charger", false)) {
 		return L4D2Infected_Charger;
-	else if (StrEqual(name, "jockey", false))
+	} else if (StrEqual(name, "jockey", false)) {
 		return L4D2Infected_Jockey;
-	else if (StrEqual(name, "witch", false))
+	} else if (StrEqual(name, "witch", false)) {
 		return L4D2Infected_Witch;
-	else if (StrEqual(name, "tank", false))
+	} else if (StrEqual(name, "tank", false)) {
 		return L4D2Infected_Tank;
+	}
 	
 	return L4D2Infected_None;
 }
@@ -405,34 +379,28 @@ stock L4D2Infected L4D2_GetInfectedID(const char[] name)
  * @param id		ID of the infected.
  * @return			True if found and buffer filled, false otherwise.
  */
-stock bool L4D_GetInfectedName(L4DInfected id, char[] name, int size, bool capitalize = false)
-{
-	switch (id)
-	{
-		case L4DInfected_None:
+stock bool L4D_GetInfectedName(L4DInfected id, char[] name, int size, bool capitalize = false) {
+	switch (id) {
+		case L4DInfected_None: {
 			return false;
-		case L4DInfected_Smoker:
-		{
+		}
+		case L4DInfected_Smoker: {
 			strcopy(name, size, capitalize ? "Smoker" : "smoker");
 			return true;
 		}
-		case L4DInfected_Boomer:
-		{
+		case L4DInfected_Boomer: {
 			strcopy(name, size, capitalize ? "Boomer" : "boomer");
 			return true;
 		}
-		case L4DInfected_Hunter:
-		{
+		case L4DInfected_Hunter: {
 			strcopy(name, size, capitalize ? "Hunter" : "hunter");
 			return true;
 		}
-		case L4DInfected_Witch:
-		{
+		case L4DInfected_Witch: {
 			strcopy(name, size, capitalize ? "Witch" : "witch");
 			return true;
 		}
-		case L4DInfected_Tank:
-		{
+		case L4DInfected_Tank: {
 			strcopy(name, size, capitalize ? "Tank" : "tank");
 			return true;
 		}
@@ -447,49 +415,40 @@ stock bool L4D_GetInfectedName(L4DInfected id, char[] name, int size, bool capit
  * @param id		ID of the infected.
  * @return			True if found and buffer filled, false otherwise.
  */
-stock bool L4D2_GetInfectedName(L4D2Infected id, char[] name, int size, bool capitalize = false)
-{
-	switch (id)
-	{
-		case L4D2Infected_None:
+stock bool L4D2_GetInfectedName(L4D2Infected id, char[] name, int size, bool capitalize = false) {
+	switch (id) {
+		case L4D2Infected_None: {
 			return false;
-		case L4D2Infected_Smoker:
-		{
+		}
+		case L4D2Infected_Smoker: {
 			strcopy(name, size, capitalize ? "Smoker" : "smoker");
 			return true;
 		}
-		case L4D2Infected_Boomer:
-		{
+		case L4D2Infected_Boomer: {
 			strcopy(name, size, capitalize ? "Boomer" : "boomer");
 			return true;
 		}
-		case L4D2Infected_Hunter:
-		{
+		case L4D2Infected_Hunter: {
 			strcopy(name, size, capitalize ? "Hunter" : "hunter");
 			return true;
 		}
-		case L4D2Infected_Spitter:
-		{
+		case L4D2Infected_Spitter: {
 			strcopy(name, size, capitalize ? "Spitter" : "spitter");
 			return true;
 		}
-		case L4D2Infected_Jockey:
-		{
+		case L4D2Infected_Jockey: {
 			strcopy(name, size, capitalize ? "Jockey" : "jockey");
 			return true;
 		}
-		case L4D2Infected_Charger:
-		{
+		case L4D2Infected_Charger: {
 			strcopy(name, size, capitalize ? "Charger" : "charger");
 			return true;
 		}
-		case L4D2Infected_Witch:
-		{
+		case L4D2Infected_Witch: {
 			strcopy(name, size, capitalize ? "Witch" : "witch");
 			return true;
 		}
-		case L4D2Infected_Tank:
-		{
+		case L4D2Infected_Tank: {
 			strcopy(name, size, capitalize ? "Tank" : "tank");
 			return true;
 		}

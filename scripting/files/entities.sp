@@ -367,7 +367,7 @@ public int MenuHandler_ListOwnedEntities(Menu menu, MenuAction action, int param
 			{
 				g_OwnedEntities[param1].Erase(index);
 				Command_ListOwnedEntities(param1, 0);
-				return;
+				return 0;
 			}
 
 			g_iTarget[param1] = EntIndexToEntRef(entity);
@@ -380,4 +380,6 @@ public int MenuHandler_ListOwnedEntities(Menu menu, MenuAction action, int param
 			delete menu;
 		}
 	}
+
+	return 0;
 }

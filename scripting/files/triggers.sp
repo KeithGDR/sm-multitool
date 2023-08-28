@@ -78,7 +78,7 @@ public int MenuHandler_CreateTrigger(Menu menu, MenuAction action, int param1, i
 				{
 					PrintToChat(param1, "You must specify a name in order to create a zone.");
 					OpenCreateTriggerMenu(param1);
-					return;
+					return 0;
 				}
 
 				int entity = g_Trigger[param1].Create();
@@ -97,6 +97,8 @@ public int MenuHandler_CreateTrigger(Menu menu, MenuAction action, int param1, i
 		case MenuAction_End:
 			delete menu;
 	}
+
+	return 0;
 }
 
 void DrawTrigger(int entity, int client = 0, float time = 99999.0)
