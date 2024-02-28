@@ -1,5 +1,9 @@
 public Action Command_CreateTrigger(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0 || !IsPlayerAlive(client) || g_Trigger[client].editing != 0)
 		return Plugin_Handled;
 	
@@ -262,6 +266,10 @@ public void OnGameFrame()
 
 public Action Command_DeleteTriggers(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+	
 	int length = g_Triggers.Length;
 
 	if (length < 1)

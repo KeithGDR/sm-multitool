@@ -13,10 +13,6 @@
 #include <misc-sm>
 #include <misc-tf>
 
-#undef REQUIRE_EXTENSIONS
-#include <tf2items>
-#define REQUIRE_EXTENSIONS
-
 #undef REQUIRE_PLUGIN
 #include <tf2attributes>
 #include <tf_econ_data>
@@ -26,12 +22,13 @@
 #define PLUGIN_NAME "[SM] Multitool"
 #define PLUGIN_AUTHOR "Drixevel"
 #define PLUGIN_DESCRIPTION "A very large and bloated plugin that consists of tools via commands and code to make managing servers and developing plugins easy."
-#define PLUGIN_VERSION "1.1.2"
+#define PLUGIN_VERSION "1.1.3"
 #define PLUGIN_URL "https://drixevel.dev/"
 
 #define TAG "[Tools]"
 
 //Globals
+ConVar convar_Enabled;
 ConVar convar_Autoreload;
 ConVar convar_DisableWaitingForPlayers;
 
@@ -192,7 +189,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	game = GetEngineVersion();
 
 	#if defined _tf2_included
-	if (game == Engine_TF2) {
+	if (game != Engine_TF2) {
 		MarkNativeAsOptional("TF2Econ_GetItemClassName");
 		MarkNativeAsOptional("TF2Econ_GetItemSlot");
 		MarkNativeAsOptional("TF2Items_CreateItem");
@@ -213,6 +210,7 @@ public void OnPluginStart() {
 	LoadTranslations("common.phrases");
 
 	CreateConVar("sm_multitool_version", PLUGIN_VERSION, PLUGIN_DESCRIPTION, FCVAR_DONTRECORD);
+	convar_Enabled = CreateConVar("sm_multitool_enabled", "1", "Should this plugin be enabled or disabled?", FCVAR_NOTIFY, true, 0.0, true, 1.0);
 	convar_Autoreload = CreateConVar("sm_multitool_autoreload", "1");
 	convar_DisableWaitingForPlayers = CreateConVar("sm_multitool_disable_waitingforplayers", "1");
 	//AutoExecConfig();
@@ -617,7 +615,18 @@ public void OnClientDisconnect(int client) {
 	g_TimerVal[client] = 0.0;
 }
 
+bool IsEnabled() {
+	return convar_Enabled.BoolValue;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Commands
+
 public Action Command_SilentNoclip(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		SendPrint(client, "You must be in-game to use this command.");
 		return Plugin_Handled;
@@ -633,6 +642,10 @@ public Action Command_SilentNoclip(int client, int args) {
 }
 
 public Action Command_Tools(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		SendPrint(client, "You must be in-game to use this command.");
 		return Plugin_Handled;
@@ -668,6 +681,10 @@ public int PanelHandler_Commands(Menu menu, MenuAction action, int param1, int p
 }
 
 public Action Command_Restart(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	SendConfirmationMenu(client, Confirm_Restart, "Are you sure you want to restart the server?", MENU_TIME_FOREVER);
 	return Plugin_Handled;
 }
@@ -685,6 +702,10 @@ public Action Timer_Restart(Handle timer) {
 }
 
 public Action Command_Quit(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	SendConfirmationMenu(client, Confirm_Quit, "Are you sure you want close the server?", MENU_TIME_FOREVER);
 	return Plugin_Handled;
 }
@@ -702,6 +723,10 @@ public Action Timer_Quit(Handle timer) {
 }
 
 public Action Command_Teleport(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		SendPrint(client, "You must be in-game to use this command.");
 		return Plugin_Handled;
@@ -747,6 +772,10 @@ public Action Command_Teleport(int client, int args) {
 }
 
 public Action Command_TeleportCoords(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	float vecOrigin[3];
 	vecOrigin[0] = GetCmdArgFloat(1);
 	vecOrigin[1] = GetCmdArgFloat(2);
@@ -759,6 +788,10 @@ public Action Command_TeleportCoords(int client, int args) {
 }
 
 public Action Command_Bring(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		SendPrint(client, "You must be in-game to use this command.");
 		return Plugin_Handled;
@@ -809,6 +842,10 @@ public Action Command_Bring(int client, int args) {
 }
 
 public Action Command_Port(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		SendPrint(client, "You must be in-game to use this command.");
 		return Plugin_Handled;
@@ -860,6 +897,10 @@ public Action Command_Port(int client, int args) {
 }
 
 public Action Command_SetHealth(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to set their health.");
 		return Plugin_Handled;
@@ -903,6 +944,10 @@ public Action Command_SetHealth(int client, int args) {
 }
 
 public Action Command_AddHealth(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to add to their health.");
 		return Plugin_Handled;
@@ -946,6 +991,10 @@ public Action Command_AddHealth(int client, int args) {
 }
 
 public Action Command_RemoveHealth(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to deduct from their health.");
 		return Plugin_Handled;
@@ -993,6 +1042,10 @@ public Action Command_RemoveHealth(int client, int args) {
 }
 
 public Action Command_Team(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to set their team.");
 		return Plugin_Handled;
@@ -1067,6 +1120,10 @@ public Action Command_Team(int client, int args) {
 }
 
 public Action Command_SetTeam(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to set their team.");
 		return Plugin_Handled;
@@ -1139,6 +1196,10 @@ public Action Command_SetTeam(int client, int args) {
 }
 
 public Action Command_SwitchTeams(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	for (int i = 1; i <= MaxClients; i++) {
 		if (!IsClientInGame(i) || GetClientTeam(i) < 2) {
 			continue;
@@ -1152,6 +1213,10 @@ public Action Command_SwitchTeams(int client, int args) {
 }
 
 public Action Command_Respawn(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to respawn.");
 		return Plugin_Handled;
@@ -1210,6 +1275,10 @@ public Action Command_Respawn(int client, int args) {
 }
 
 public Action Command_RefillWeapon(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to refill their ammunition.");
 		return Plugin_Handled;
@@ -1256,6 +1325,10 @@ public Action Command_RefillWeapon(int client, int args) {
 }
 
 public Action Command_RefillAmunition(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to refill their ammunition.");
 		return Plugin_Handled;
@@ -1296,6 +1369,10 @@ public Action Command_RefillAmunition(int client, int args) {
 }
 
 public Action Command_RefillClip(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to refill their clip.");
 		return Plugin_Handled;
@@ -1376,6 +1453,10 @@ public void OnEntityDestroyed(int entity) {
 }
 
 public Action Command_ManageBots(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		SendPrint(client, "You must be in-game to use this command.");
 		return Plugin_Handled;
@@ -1609,6 +1690,10 @@ public int MenuHandler_SetBotQuota(Menu menu, MenuAction action, int param1, int
 }
 
 public Action Command_Password(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	ConVar password = FindConVar("sv_password");
 
 	char sPassword[256];
@@ -1653,6 +1738,10 @@ public Action Command_Password(int client, int args) {
 }
 
 public Action Command_EndRound(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	switch (game) {
 		case Engine_TF2: {
 			TFTeam team = TFTeam_Unassigned;
@@ -1704,6 +1793,10 @@ public void TF2_OnConditionRemoved(int client, TFCond condition) {
 }
 
 public Action Command_SetTime(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a time to set.");
 		return Plugin_Handled;
@@ -1730,6 +1823,10 @@ public Action Command_SetTime(int client, int args) {
 }
 
 public Action Command_AddTime(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int time = 999999;
 
 	if (args > 0) {
@@ -1766,6 +1863,10 @@ public Action Command_AddTime(int client, int args) {
 }
 
 public Action Command_RemoveTime(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a time to removed from.");
 		return Plugin_Handled;
@@ -1803,6 +1904,10 @@ public Action Command_RemoveTime(int client, int args) {
 }
 
 public Action Command_SetGod(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to set godmode on.");
 		return Plugin_Handled;
@@ -1837,6 +1942,10 @@ public Action Command_SetGod(int client, int args) {
 }
 
 public Action Command_SetBuddha(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to set buddhamode on.");
 		return Plugin_Handled;
@@ -1871,6 +1980,10 @@ public Action Command_SetBuddha(int client, int args) {
 }
 
 public Action Command_SetMortal(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to set mortalmode on.");
 		return Plugin_Handled;
@@ -1905,6 +2018,10 @@ public Action Command_SetMortal(int client, int args) {
 }
 
 public Action Command_StunPlayer(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to stun.");
 		return Plugin_Handled;
@@ -1967,6 +2084,10 @@ public Action Command_StunPlayer(int client, int args) {
 }
 
 public Action Command_BleedPlayer(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to bleed.");
 		return Plugin_Handled;
@@ -2018,6 +2139,10 @@ public Action Command_BleedPlayer(int client, int args) {
 }
 
 public Action Command_IgnitePlayer(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		SendPrint(client, "You must specify a target to ignite.");
 		return Plugin_Handled;
@@ -2057,6 +2182,10 @@ public Action Command_IgnitePlayer(int client, int args) {
 }
 
 public Action Command_ReloadMap(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	char sCurrentMap[MAX_MAP_NAME_LENGTH];
 	GetCurrentMap(sCurrentMap, sizeof(sCurrentMap));
 	ServerCommand("sm_map %s", sCurrentMap);
@@ -2069,6 +2198,10 @@ public Action Command_ReloadMap(int client, int args) {
 }
 
 public Action Command_MapName(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	char sCurrentMap[MAX_MAP_NAME_LENGTH];
 	GetCurrentMap(sCurrentMap, sizeof(sCurrentMap));
 
@@ -2085,6 +2218,10 @@ public Action Command_MapName(int client, int args) {
 }
 
 public Action Command_SpawnSentry(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		char sCommand[32];
 		GetCommandName(sCommand, sizeof(sCommand));
@@ -2120,6 +2257,10 @@ public Action Command_SpawnSentry(int client, int args) {
 }
 
 public Action Command_SpawnDispenser(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		char sCommand[32];
 		GetCommandName(sCommand, sizeof(sCommand));
@@ -2153,6 +2294,10 @@ public Action Command_SpawnDispenser(int client, int args) {
 }
 
 public Action Command_SpawnTeleporter(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		char sCommand[32];
 		GetCommandName(sCommand, sizeof(sCommand));
@@ -2184,6 +2329,10 @@ public Action Command_SpawnTeleporter(int client, int args) {
 }
 
 public Action Command_Particle(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0) {
 		char sCommand[64];
 		GetCommandName(sCommand, sizeof(sCommand));
@@ -2210,6 +2359,10 @@ public Action Command_Particle(int client, int args) {
 }
 
 public Action Command_ListParticles(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	ListParticles(client);
 	return Plugin_Handled;
 }
@@ -2262,8 +2415,12 @@ public int MenuHandler_Particles(Menu menu, MenuAction action, int param1, int p
 }
 
 public Action Command_GenerateParticles(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	char sPath[PLATFORM_MAX_PATH];
-	BuildPath(Path_SM, sPath, sizeof(sPath), "data/particles/");
+	BuildPath(Path_SM, sPath, sizeof(sPath), "data/");
 	
 	if (!DirExists(sPath)) {
 		CreateDirectory(sPath, 511);
@@ -2274,10 +2431,7 @@ public Action Command_GenerateParticles(int client, int args) {
 		}
 	}
 	
-	char sGame[32];
-	GetGameFolderName(sGame, sizeof(sGame));
-	
-	BuildPath(Path_SM, sPath, sizeof(sPath), "data/particles/%s.txt", sGame);
+	BuildPath(Path_SM, sPath, sizeof(sPath), "data/particles.txt");
 	
 	File file = OpenFile(sPath, "w");
 	
@@ -2300,6 +2454,10 @@ public Action Command_GenerateParticles(int client, int args) {
 	}
 	
 	delete file;
+
+	char sGame[32];
+	GetGameFolderName(sGame, sizeof(sGame));
+
 	SendPrint(client, "Particles file generated successfully for [H]%s [D]at: [H]%s [D]", sGame, sPath);
 	
 	return Plugin_Handled;
@@ -2326,6 +2484,10 @@ public void OnEntityCreated(int entity, const char[] classname) {
 }
 
 public Action Command_GetEntName(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetClientAimTarget(client, false);
 	
 	if (!IsValidEntity(target)) {
@@ -2341,6 +2503,10 @@ public Action Command_GetEntName(int client, int args) {
 }
 
 public Action Command_GetEntModel(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetClientAimTarget(client, false);
 	
 	if (!IsValidEntity(target)) {
@@ -2361,6 +2527,10 @@ public Action Command_GetEntModel(int client, int args) {
 }
 
 public Action Command_SetKillstreak(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (game != Engine_TF2) {
 		SendPrint(client, "This command is for Team Fortress 2 only.");
 		return Plugin_Handled;
@@ -2373,6 +2543,10 @@ public Action Command_SetKillstreak(int client, int args) {
 }
 
 public Action Command_GiveWeapon(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = client;
 			
 	if (args > 1) {
@@ -2451,6 +2625,10 @@ public Action Command_GiveWeapon(int client, int args) {
 }
 
 public Action Command_SpawnHealthkit(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		return Plugin_Continue;
 	}
@@ -2465,6 +2643,10 @@ public Action Command_SpawnHealthkit(int client, int args) {
 }
 
 public Action Command_Lock(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	g_Locked = !g_Locked;
 	SendPrintToAll(g_Locked ? "Server is now locked to admins by [H]%N [D]." : "Server is now unlocked by [H]%N [D].", client);
 	return Plugin_Handled;
@@ -2480,6 +2662,10 @@ public bool OnClientConnect(int client, char[] rejectmsg, int maxlen) {
 }
 
 public Action Command_DebugEvents(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (g_HookEvents.Length > 0) {
 		char sName[256];
 		for (int i = 0; i < g_HookEvents.Length; i++) {
@@ -2528,6 +2714,10 @@ public void Event_Debug(Event event, const char[] name, bool dontBroadcast) {
 }
 
 public Action Command_SetRenderColor(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int red = GetCmdArgInt(1);
 	int green = GetCmdArgInt(2);
 	int blue = GetCmdArgInt(3);
@@ -2540,6 +2730,10 @@ public Action Command_SetRenderColor(int client, int args) {
 }
 
 public Action Command_SetRenderFx(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	char sArg[64];
 	GetCmdArgString(sArg, sizeof(sArg));
 	
@@ -2550,6 +2744,10 @@ public Action Command_SetRenderFx(int client, int args) {
 }
 
 public Action Command_SetRenderMode(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	char sArg[64];
 	GetCmdArgString(sArg, sizeof(sArg));
 	
@@ -2560,6 +2758,10 @@ public Action Command_SetRenderMode(int client, int args) {
 }
 
 public Action Command_ApplyAttribute(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		return Plugin_Handled;
 	}
@@ -2611,6 +2813,10 @@ public Action Command_ApplyAttribute(int client, int args) {
 }
 
 public Action Command_RemoveAttribute(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (client == 0) {
 		return Plugin_Handled;
 	}
@@ -2658,6 +2864,10 @@ public Action Command_RemoveAttribute(int client, int args) {
 }
 
 public Action Command_GetEntProp(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetClientAimTarget(client, false);
 	
 	if (!IsValidEntity(target)) {
@@ -2680,6 +2890,10 @@ public Action Command_GetEntProp(int client, int args) {
 }
 
 public Action Command_SetEntProp(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetClientAimTarget(client, false);
 	
 	if (!IsValidEntity(target)) {
@@ -2705,6 +2919,10 @@ public Action Command_SetEntProp(int client, int args) {
 }
 
 public Action Command_GetEntPropFloat(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetClientAimTarget(client, false);
 	
 	if (!IsValidEntity(target)) {
@@ -2727,6 +2945,10 @@ public Action Command_GetEntPropFloat(int client, int args) {
 }
 
 public Action Command_SetEntPropFloat(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetClientAimTarget(client, false);
 	
 	if (!IsValidEntity(target)) {
@@ -2752,6 +2974,10 @@ public Action Command_SetEntPropFloat(int client, int args) {
 }
 
 public Action Command_GetEntClass(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetClientAimTarget(client, false);
 	
 	if (!IsValidEntity(target)) {
@@ -2802,11 +3028,19 @@ public Action OnClientCommand(int client, int args) {
 }
 
 public Action Command_GetEntCount(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	SendPrint(client, "Total Networked Entities: [H]%i", GetEntityCount());
 	return Plugin_Handled;
 }
 
 public Action Command_Bhop(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	char sTarget[MAX_TARGET_LENGTH];
 	GetCmdArg(1, sTarget, sizeof(sTarget));
 
@@ -2846,6 +3080,10 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 }
 
 public Action Command_KillEntity(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetClientAimTarget(client, false);
 	
 	if (!IsValidEntity(target)) {
@@ -2895,6 +3133,10 @@ stock void SendPrintToAll(const char[] format, any ...) {
 }
 
 public Action Command_SpawnDummy(int client, int args) {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+	
 	float eyePos[3], eyeAng[3], endPos[3];
 	GetClientEyePosition(client, eyePos);
 	GetClientEyeAngles(client, eyeAng);

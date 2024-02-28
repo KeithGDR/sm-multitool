@@ -1,5 +1,9 @@
 public Action Command_SetArmor(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to set their armor.");
@@ -41,6 +45,10 @@ public Action Command_SetArmor(int client, int args)
 
 public Action Command_AddArmor(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to add to their armor.");
@@ -82,6 +90,10 @@ public Action Command_AddArmor(int client, int args)
 
 public Action Command_RemoveArmor(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+	
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to deduct from their armor.");

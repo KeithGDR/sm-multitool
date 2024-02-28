@@ -1,5 +1,9 @@
 public Action Command_CreateEntity(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a classname.");
@@ -46,6 +50,10 @@ public Action Command_CreateEntity(int client, int args)
 
 public Action Command_DispatchKeyValue(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args < 2)
 	{
 		SendPrint(client, "You must input at least 2 arguments for the key and the value.");
@@ -84,6 +92,10 @@ public Action Command_DispatchKeyValue(int client, int args)
 
 public Action Command_DispatchKeyValueFloat(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args < 2)
 	{
 		SendPrint(client, "You must input at least 2 arguments for the key and the value.");
@@ -123,6 +135,10 @@ public Action Command_DispatchKeyValueFloat(int client, int args)
 
 public Action Command_DispatchKeyValueVector(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args < 2)
 	{
 		SendPrint(client, "You must input at least 2 arguments for the key and the value.");
@@ -164,6 +180,10 @@ public Action Command_DispatchKeyValueVector(int client, int args)
 
 public Action Command_DispatchSpawn(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (g_iTarget[client] == INVALID_ENT_REFERENCE)
 	{
 		SendPrint(client, "You aren't currently targeting an entity.");
@@ -190,6 +210,10 @@ public Action Command_DispatchSpawn(int client, int args)
 
 public Action Command_AcceptEntityInput(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (g_iTarget[client] == INVALID_ENT_REFERENCE)
 	{
 		SendPrint(client, "You aren't currently targeting an entity.");
@@ -231,6 +255,10 @@ public Action Command_AcceptEntityInput(int client, int args)
 
 public Action Command_Animate(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (g_iTarget[client] == INVALID_ENT_REFERENCE)
 	{
 		SendPrint(client, "You aren't currently targeting an entity.");
@@ -261,6 +289,10 @@ public Action Command_Animate(int client, int args)
 
 public Action Command_TargetEntity(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int entity = GetClientAimTarget(client, false);
 
 	if (!IsValidEntity(entity))
@@ -280,6 +312,10 @@ public Action Command_TargetEntity(int client, int args)
 
 public Action Command_DeleteEntity(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (g_iTarget[client] == INVALID_ENT_REFERENCE)
 	{
 		SendPrint(client, "You aren't currently targeting an entity.");
@@ -307,6 +343,10 @@ public Action Command_DeleteEntity(int client, int args)
 
 public Action Command_ListOwnedEntities(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+	
 	int owned = g_OwnedEntities[client].Length;
 
 	if (owned == 0)

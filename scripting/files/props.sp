@@ -1,5 +1,9 @@
 public Action Command_CreateProp(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "Must specify a model path.");
@@ -23,6 +27,10 @@ public Action Command_CreateProp(int client, int args)
 
 public Action Command_AnimateProp(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	int target = GetNearestEntity(client, "prop_dynamic");
 	
 	if (!IsValidEntity(target))
@@ -57,6 +65,10 @@ public Action Command_AnimateProp(int client, int args)
 
 public Action Command_DeleteProp(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+	
 	int target = GetNearestEntity(client, "prop_dynamic");
 	
 	if (!IsValidEntity(target))

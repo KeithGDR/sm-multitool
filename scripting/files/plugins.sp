@@ -1,5 +1,9 @@
 public Action Command_LoadPlugin(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	char sName[128];
 	GetCmdArgString(sName, sizeof(sName));
 	
@@ -11,6 +15,10 @@ public Action Command_LoadPlugin(int client, int args)
 
 public Action Command_ReloadPlugin(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	char sName[128];
 	GetCmdArgString(sName, sizeof(sName));
 	
@@ -22,6 +30,10 @@ public Action Command_ReloadPlugin(int client, int args)
 
 public Action Command_UnloadPlugin(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+	
 	char sName[128];
 	GetCmdArgString(sName, sizeof(sName));
 	

@@ -1,5 +1,9 @@
 public Action Command_SetClass(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to set their class.");
@@ -61,6 +65,10 @@ public Action Command_SetClass(int client, int args)
 
 public Action Command_Regenerate(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to regenerate.");
@@ -103,6 +111,10 @@ public Action Command_Regenerate(int client, int args)
 
 public Action Command_SetCondition(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to add a condition to.");
@@ -176,6 +188,10 @@ public Action Command_SetCondition(int client, int args)
 
 public Action Command_RemoveCondition(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to remove a condition from.");
@@ -236,6 +252,10 @@ public Action Command_RemoveCondition(int client, int args)
 
 public Action Command_SpewConditions(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (game != Engine_TF2)
 	{
 		SendPrint(client, "This command is for Team Fortress 2 only.");
@@ -249,6 +269,10 @@ public Action Command_SpewConditions(int client, int args)
 
 public Action Command_SetUbercharge(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to set their ubercharge.");
@@ -298,6 +322,10 @@ public Action Command_SetUbercharge(int client, int args)
 
 public Action Command_AddUbercharge(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to add to their ubercharge.");
@@ -347,6 +375,10 @@ public Action Command_AddUbercharge(int client, int args)
 
 public Action Command_RemoveUbercharge(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to deduct from their ubercharge.");
@@ -396,6 +428,10 @@ public Action Command_RemoveUbercharge(int client, int args)
 
 public Action Command_SetMetal(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to set their metal.");
@@ -445,6 +481,10 @@ public Action Command_SetMetal(int client, int args)
 
 public Action Command_AddMetal(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to add to their metal.");
@@ -494,6 +534,10 @@ public Action Command_AddMetal(int client, int args)
 
 public Action Command_RemoveMetal(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to deduct from their metal.");
@@ -543,6 +587,10 @@ public Action Command_RemoveMetal(int client, int args)
 
 public Action Command_GetMetal(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to see their metal amount.");
@@ -575,6 +623,10 @@ public Action Command_GetMetal(int client, int args)
 
 public Action Command_SetCrits(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to set crits on.");
@@ -633,6 +685,10 @@ public Action Command_SetCrits(int client, int args)
 
 public Action Command_RemoveCrits(int client, int args)
 {
+	if (!IsEnabled()) {
+		return Plugin_Continue;
+	}
+	
 	if (args == 0)
 	{
 		SendPrint(client, "You must specify a target to remove crits from.");
