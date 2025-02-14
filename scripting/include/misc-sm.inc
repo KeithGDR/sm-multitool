@@ -3771,8 +3771,6 @@ stock bool SetModel(int entity, char model[PLATFORM_MAX_PATH]) {
 			return true;
 		}
 	}
-
-	//return false;
 }
 
 stock int PrepareModel(char model[PLATFORM_MAX_PATH], bool preload = false) {
@@ -3955,7 +3953,7 @@ stock bool EmitAmbientSoundSafe(const char[] sample, const float origin[3], int 
 		Format(sSound, sizeof(sSound), "*%s", sSound);
 	}
 
-	if (PrecacheSound(sSound)) {
+	if (!PrecacheSound(sSound)) {
 		LogError("Error playing ambient sound, not precached: %s", sSound);
 		return false;
 	}
