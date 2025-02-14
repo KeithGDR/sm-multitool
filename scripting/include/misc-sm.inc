@@ -1524,11 +1524,11 @@ stock bool RemoveEntRef(int& reference = INVALID_ENT_REFERENCE) {
 }
 
 stock float FloatMultiplier(float value, float multiplier) {
-	return value *= 1.0 + multiplier;
+	return value * (1.0 + multiplier);
 }
 
 stock float FloatDivider(float value, float divider) {
-	return value *= 1.0 - divider;
+	return value * (1.0 - divider);
 }
 
 stock bool CalculateTime(int value, int timer) {
@@ -2044,7 +2044,7 @@ stock void ClearOverlay(int client) {
 }
 
 stock float GetVotePercent(int votes, int totalVotes) {
-	return float(votes) / float(totalVotes);
+	return (float(votes) / float(totalVotes));
 }
 
 /* Found from the MOTDGD plugin. Though, I did reformat it for the new SourceMod syntax. */
@@ -3730,7 +3730,7 @@ stock void ReadPackVector(DataPack pack, float vector[3]) {
 /*--------------------------------------------------------->*/
 //MODEL
 
-stock bool SetModel(int entity, char model[PLATFORM_MAX_PATH], bool preload = false) {
+stock bool SetModel(int entity, char model[PLATFORM_MAX_PATH]) {
 	if (entity <= 0) {
 		return false;
 	}
@@ -4405,7 +4405,7 @@ stock void CheatCommand(int client, char[] command, char[] arguments = "") {
 	SetCommandFlags(command, flags);
 }
 
-stock bool SetModelViaConVar(int entity, ConVar &convar, bool preload = false) {
+stock bool SetModelViaConVar(int entity, ConVar &convar) {
 	if (convar == null) {
 		return false;
 	}
@@ -4413,7 +4413,7 @@ stock bool SetModelViaConVar(int entity, ConVar &convar, bool preload = false) {
 	char sBuffer[PLATFORM_MAX_PATH];
 	convar.GetString(sBuffer, sizeof(sBuffer));
 
-	return SetModel(entity, sBuffer, preload);
+	return SetModel(entity, sBuffer);
 }
 
 stock int PrepareModelConVar(ConVar &convar, bool preload = false) {
@@ -4449,7 +4449,7 @@ stock bool EmitSoundToAllViaConVar(ConVar convar, int entity = SOUND_FROM_PLAYER
 	return EmitSoundToAllSafe(sBuffer, entity, channel, level, flags, volume, pitch, speakerentity, origin, dir, updatePos, soundtime);
 }
 
-stock bool EmitAmbientSoundViaConVar(ConVar convar, bool preload = false, const float origin[3], int entity = SOUND_FROM_WORLD, int level = SNDLEVEL_NORMAL, int flags = SND_NOFLAGS, float vol = SNDVOL_NORMAL, int pitch = SNDPITCH_NORMAL, float delay = 0.0) {
+stock bool EmitAmbientSoundViaConVar(ConVar convar, const float origin[3], int entity = SOUND_FROM_WORLD, int level = SNDLEVEL_NORMAL, int flags = SND_NOFLAGS, float vol = SNDVOL_NORMAL, int pitch = SNDPITCH_NORMAL, float delay = 0.0) {
 	if (convar == null) {
 		return false;
 	}

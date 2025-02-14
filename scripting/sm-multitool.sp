@@ -20,10 +20,10 @@
 
 //Defines
 #define PLUGIN_NAME "[SM] Multitool"
-#define PLUGIN_AUTHOR "Drixevel"
+#define PLUGIN_AUTHOR "KeithGDR"
 #define PLUGIN_DESCRIPTION "A very large and bloated plugin that consists of tools via commands and code to make managing servers and developing plugins easy."
-#define PLUGIN_VERSION "1.1.3"
-#define PLUGIN_URL "https://drixevel.dev/"
+#define PLUGIN_VERSION "1.1.4"
+#define PLUGIN_URL "https://github.com/KeithGDR/sm-multitool"
 
 #define TAG "[Tools]"
 

@@ -3222,7 +3222,7 @@ stock int TF2_GiveViewmodel(int client, int viewmodel) {
 *	return	Entity index.
 **/
 stock int TF2_GiveWearable(int client, int index, char[] classname = "tf_wearable", int quality = 9, int level = 0)  {
-	Handle item = TF2Items_CreateItem(OVERRIDE_ALL || FORCE_GENERATION);
+	Handle item = TF2Items_CreateItem(OVERRIDE_ALL | FORCE_GENERATION);
 	TF2Items_SetClassname(item, classname);
 	TF2Items_SetItemIndex(item, index);
 	TF2Items_SetQuality(item, quality);
