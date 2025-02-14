@@ -16,13 +16,14 @@
 #undef REQUIRE_PLUGIN
 #include <tf2attributes>
 #include <tf_econ_data>
+#include <left4dhooks>
 #define REQUIRE_PLUGIN
 
 //Defines
 #define PLUGIN_NAME "[SM] Multitool"
 #define PLUGIN_AUTHOR "KeithGDR"
 #define PLUGIN_DESCRIPTION "A very large and bloated plugin that consists of tools via commands and code to make managing servers and developing plugins easy."
-#define PLUGIN_VERSION "1.1.4"
+#define PLUGIN_VERSION "1.1.5"
 #define PLUGIN_URL "https://github.com/KeithGDR/sm-multitool"
 
 #define TAG "[Tools]"
@@ -174,7 +175,7 @@ int g_Laser;
 #include "files/timers.sp"
 #include "files/triggers.sp"
 #include "files/games/csgo.sp"
-//#include "files/games/left4dead2.sp"
+#include "files/games/left4dead2.sp"
 #include "files/games/tf.sp"
 
 public Plugin myinfo = {
@@ -362,6 +363,21 @@ public void OnPluginStart() {
 	RegAdminCmd("sm_addcrits", Command_SetCrits, ADMFLAG_SLAY, "Adds crits on yourself or other clients.");
 	RegAdminCmd2("sm_removecrits", Command_RemoveCrits, ADMFLAG_SLAY, "Removes crits from yourself or other clients.");
 	RegAdminCmd("sm_stripcrits", Command_RemoveCrits, ADMFLAG_SLAY, "Removes crits from yourself or other clients.");
+
+	//left4dead2
+	RegAdminCmd2("sm_common", Command_SpawnCommon, ADMFLAG_SLAY, "Spawns a common infected where you're looking.");
+	RegAdminCmd2("sm_zombie", Command_SpawnCommon, ADMFLAG_SLAY, "Spawns a common infected where you're looking.");
+	RegAdminCmd2("sm_spawncommon", Command_SpawnCommon, ADMFLAG_SLAY, "Spawns a common infected where you're looking.");
+	RegAdminCmd2("sm_clear", Command_ClearZombies, ADMFLAG_SLAY, "Clears out all Common Infected nearby.");
+	RegAdminCmd2("sm_cull", Command_ClearZombies, ADMFLAG_SLAY, "Clears out all Common Infected nearby.");
+	RegAdminCmd2("sm_clearcommons", Command_ClearZombies, ADMFLAG_SLAY, "Clears out all Common Infected nearby.");
+	RegAdminCmd2("sm_cullcommons", Command_ClearZombies, ADMFLAG_SLAY, "Clears out all Common Infected nearby.");
+	RegAdminCmd2("sm_panic", Command_ForcePanic, ADMFLAG_SLAY, "Forces a Panic Event to occur.");
+	RegAdminCmd2("sm_panicevent", Command_ForcePanic, ADMFLAG_SLAY, "Forces a Panic Event to occur.");
+	RegAdminCmd2("sm_forcepanic", Command_ForcePanic, ADMFLAG_SLAY, "Forces a Panic Event to occur.");
+	RegAdminCmd2("sm_forcepanicevent", Command_ForcePanic, ADMFLAG_SLAY, "Forces a Panic Event to occur.");
+	RegAdminCmd2("sm_ledge", Command_LedgeGrab, ADMFLAG_SLAY, "Toggles the ability for player to grab a ledge on or off.");
+	RegAdminCmd2("sm_ledgegrab", Command_LedgeGrab, ADMFLAG_SLAY, "Toggles the ability for player to grab a ledge on or off.");
 
 	//Props
 	RegAdminCmd2("sm_createprop", Command_CreateProp, ADMFLAG_ROOT, "Create a dynamic prop entity.");
