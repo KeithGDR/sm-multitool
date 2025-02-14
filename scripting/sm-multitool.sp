@@ -23,7 +23,7 @@
 #define PLUGIN_NAME "[SM] Multitool"
 #define PLUGIN_AUTHOR "KeithGDR"
 #define PLUGIN_DESCRIPTION "A very large and bloated plugin that consists of tools via commands and code to make managing servers and developing plugins easy."
-#define PLUGIN_VERSION "1.1.5"
+#define PLUGIN_VERSION "1.1.6"
 #define PLUGIN_URL "https://github.com/KeithGDR/sm-multitool"
 
 #define TAG "[Tools]"
@@ -1484,14 +1484,14 @@ public Action Command_ManageBots(int client, int args) {
 
 void OpenManageBotsMenu(int client) {
 	Menu menu = new Menu(MenuHandler_ManageBots);
-	menu.SetTitle("[Tools] Manage Bots:");
+	menu.SetTitle(":[Tools] Manage Bots:");
 
-	menu.AddItem("spawn", "Spawn a bot");
-	menu.AddItem("remove", "Remove a bot");
-	menu.AddItem("class", "Set bot class");
-	menu.AddItem("team", "Switch bot team");
-	menu.AddItem("move", "Toggle bot movement");
-	menu.AddItem("quota", "Update bot quota");
+	menu.AddItem("spawn", "Spawn a Bot");
+	menu.AddItem("remove", "Remove a Bot");
+	menu.AddItem("class", "Set Bot Class");
+	menu.AddItem("team", "Switch Bot Team");
+	menu.AddItem("move", "Toggle Bot Movement");
+	menu.AddItem("quota", "Update Bot Quota");
 
 	menu.Display(client, MENU_TIME_FOREVER);
 }
