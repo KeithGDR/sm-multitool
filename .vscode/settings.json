@@ -1,6 +1,0 @@
-{
-	"SourcePawnLanguageServer.compiler.path": "D:/projects/scripts/sourcemod/sm-multitool/scripting/spcomp64.exe",
-	"SourcePawnLanguageServer.includeDirectories": [
-		"D:/projects/scripts/sourcemod/sm-multitool/scripting/include"
-	],
-}
