@@ -1,7 +1,7 @@
 /**
  * vim: set ts=4 :
  * =============================================================================
- * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.
+ * SourceMod (C)2004-2025 AlliedModders LLC.  All rights reserved.
  * =============================================================================
  *
  * This file is part of the SourceMod/SourcePawn SDK.
@@ -30,20 +30,10 @@
  * Version: $Id$
  */
 
-#if defined _version_included
+#if defined _virtual_address_included
  #endinput
 #endif
-#define _version_included
+#define _virtual_address_included
 
-#tryinclude <version_auto>
-
-#if !defined _auto_version_included
- #define SOURCEMOD_V_TAG         "manual"
- #define SOURCEMOD_V_REV         0
- #define SOURCEMOD_V_CSET        "0"
- #define SOURCEMOD_V_MAJOR       1               /**< SourceMod Major version */
- #define SOURCEMOD_V_MINOR       13              /**< SourceMod Minor version */
- #define SOURCEMOD_V_RELEASE     0               /**< SourceMod Release version */
-
- #define SOURCEMOD_VERSION       "1.13.0-manual" /**< SourceMod version string (major.minor.release-tag) */
-#endif
+public const Address __Virtual_Address__ = view_as<Address>(0);
+public const Address PointerSize = view_as<Address>(0); /**< Size of a pointer in bytes (same as `sizeof(void*)`) */
